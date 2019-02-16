@@ -1,0 +1,38 @@
+#In case you wanted to turn off the plugin, leave true for plugin to function
+enabled: true
+
+items:
+  # in case you wanted to use an item that has custom lore/name/enchants
+  # the name of the entry matters, captitals matter as well
+  # material names are found here on the left column: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+  # name and lore both accept color codes found here: https://minecraft.gamepedia.com/Formatting_codes
+  # every line added to the lore section represents a line in the actual game
+  # the syntax of enchantment entries is <enchant>,<level>,
+  # enchants are just their vanilla names
+  example-item:
+    name: 'example item'
+    lore:
+      - Just an example item
+      - Second line cause why not
+    enchants:
+      - DAMAGE_ALL,5 # DAMAGE_ALL is sharpness, so Sharpness 5
+    material: COOKIE
+
+rewards:
+  # Here is a sample rewards entry
+  # 'example' is the name of the entry and can be claimed with /reward claim example
+  # the reward will refresh every 24 hours
+  # to claim it, a player must have the permission 'example.permission', leave the permission area blank or just don't include if you want everyone to have access
+  # when the reward is claimed, it will reward the player with 1 diamond and 4 golden apples and 2 example items (see example-item above)
+  # the syntax for item entries are <material>,<amount>, material names are found in the left column of this: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+  # if you want to use an item you defined above for this, just replace <material> with the name of the entry
+  # DO NOT USE SPACES YOU WILL BREAK THE CONFIG DON'T USE SPACES OR YOU WILL GET SCREWED
+  example:
+    refresh-hours: 24
+    permission: 'example.permission'
+    items:
+      - DIAMOND,1
+      - GOLDEN_APPLE,4
+      - MONEY,60            # Use 'MONEY' in where <material> is supposed to go to list money as a reward,
+      - example-item,2      # reminder that MONEY only works if you have the Vault plugin https://dev.bukkit.org/projects/vault
+
