@@ -21,18 +21,18 @@ items:
 rewards:
   # Here is a sample rewards entry
   # 'example' is the name of the entry and can be claimed with /reward claim example
-  # the reward will refresh every 24 hours
+  # the reward will refresh every 24 hours or 1440 minutes
   # to claim it, a player must have the permission 'example.permission', leave the permission area blank or just don't include if you want everyone to have access
   # when the reward is claimed, it will reward the player with 1 diamond and 4 golden apples and 2 example items (see example-item above)
   # the syntax for item entries are <material>,<amount>, material names are found in the left column of this: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
   # if you want to use an item you defined above for this, just replace <material> with the name of the entry
   # DO NOT USE SPACES YOU WILL BREAK THE CONFIG DON'T USE SPACES OR YOU WILL GET SCREWED
   example:
-    refresh-hours: 24
+    refresh-minutes: 1440
     permission: 'example.permission'
     items:
       - DIAMOND,1
       - GOLDEN_APPLE,4
-      - MONEY,60            # Use 'MONEY' in where <material> is supposed to go to list money as a reward,
+      - MONEY,60.0          # Use 'MONEY' in where <material> is supposed to go to list money as a reward, use a decimal instead of amount with money
       - example-item,2      # reminder that MONEY only works if you have the Vault plugin https://dev.bukkit.org/projects/vault
 
