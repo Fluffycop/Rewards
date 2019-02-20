@@ -1,6 +1,5 @@
-package me.doublealiu.dailyrewards;
+package me.fluffycop.dailyrewards;
 
-import me.doublealiu.dailyrewards.DailyRewards;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;

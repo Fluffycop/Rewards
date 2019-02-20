@@ -1,4 +1,4 @@
-package me.doublealiu.dailyrewards;
+package me.fluffycop.dailyrewards;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -21,8 +21,6 @@ public class DailyRewards extends JavaPlugin {
         enableCheck();
         config.loadYamls();
         setupEconomy();
-
-        BukkitTask task = new RewardDecrementerTask().runTaskTimerAsynchronously(this, MINUTE_TICKS, MINUTE_TICKS);
     }
 
     @Override

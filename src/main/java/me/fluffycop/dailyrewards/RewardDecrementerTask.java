@@ -1,4 +1,4 @@
-package me.doublealiu.dailyrewards;
+package me.fluffycop.dailyrewards;
 
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -6,7 +6,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class RewardDecrementerTask extends BukkitRunnable {
 

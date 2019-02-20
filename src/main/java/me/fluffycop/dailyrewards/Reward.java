@@ -1,7 +1,6 @@
-package me.doublealiu.dailyrewards;
+package me.fluffycop.dailyrewards;
 
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
