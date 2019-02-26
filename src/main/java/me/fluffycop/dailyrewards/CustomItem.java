@@ -4,6 +4,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -12,10 +13,10 @@ public class CustomItem {
     private ItemStack item;
     private String name;
 
-    public final static Set<CustomItem> customItemSet = new HashSet<>();
+    private final static Set<CustomItem> customItemSet = Collections.synchronizedSet(new HashSet<CustomItem>());
 
     public CustomItem(){
-
+        add(this);
     }
 
     public ItemStack cloneItem(int amount){
@@ -32,7 +33,7 @@ public class CustomItem {
     }
 
     public static CustomItem getByName(String name){
-        for(CustomItem cItem : customItemSet){
+        for(CustomItem cItem : get()){
             if(cItem.getName().equals(name)){
                 return cItem;
             }
@@ -54,5 +55,13 @@ public class CustomItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static synchronized void add(CustomItem cItem){
+        customItemSet.add(cItem);
+    }
+
+    public static synchronized Set<CustomItem> get(){
+        return customItemSet;
     }
 }

@@ -5,22 +5,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-class Reward {
-    private Set<ItemStack> rewardItemsVanilla;
-    private Map<CustomItem, Integer> rewardItemsCustom;
+public class Reward {
+    private Set<ItemStack> rewardItemsVanilla = new HashSet<>();
+    private Map<CustomItem, Integer> rewardItemsCustom = new HashMap<>();
     private double money = 0.0;
     private String name;
     private String permission;
     private int refreshMinutes;
 
-    public final static Set<Reward> rewardList = new HashSet<>();
+    private final static Set<Reward> rewardSet = Collections.synchronizedSet(new HashSet<Reward>());
 
     public Reward(){
-
+        add(this);
     }
 
     //Getters and setteers
@@ -33,7 +31,7 @@ class Reward {
     }
 
     public static Reward getByName(String name){
-        for(Reward reward : rewardList){
+        for(Reward reward : get()){
             if(reward.name.equals(name)){
                 return reward;
             }
@@ -63,7 +61,7 @@ class Reward {
             isFull = playerInv.firstEmpty()  == -1;
         }
 
-        if(money > 0 && DailyRewards.ecoEnabled){
+        if(money > 0){
             DailyRewards.economy.depositPlayer(player, money);
         }
     }
@@ -106,5 +104,13 @@ class Reward {
 
     public void setMoney(double money) {
         this.money = money;
+    }
+
+    public static synchronized void add(Reward reward){
+        rewardSet.add(reward);
+    }
+
+    public static synchronized Set<Reward> get(){
+        return rewardSet;
     }
 }

@@ -87,7 +87,7 @@ class YMLConfig {
                 itemWrapper.setName(anItemStr);
                 itemWrapper.setItem(item);
 
-                CustomItem.customItemSet.add(itemWrapper);
+                DailyRewards.getCustomItemSet().add(itemWrapper);
             }catch(Exception exception){
                 exception.printStackTrace();
                 continue;
@@ -119,7 +119,7 @@ class YMLConfig {
                 String[] materialAmount = materialStr.split(",");
                 CustomItem cItem = CustomItem.getByName(materialAmount[0]);
 
-                if(materialAmount[0].equals(MONEY_MATERIAL) && DailyRewards.ecoEnabled) {
+                if(materialAmount[0].equals(MONEY_MATERIAL) && plugin.isEcoEnabled()) {
                     try{
                         double moneyAmount = Double.parseDouble(materialAmount[1]);
                         reward.setMoney(moneyAmount);
