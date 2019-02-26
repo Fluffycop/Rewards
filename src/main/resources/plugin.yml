@@ -1,5 +1,5 @@
 name: DailyRewards
 author: doublealiu
 version: @version@
-main: package DailyRewards;
+main: me.fluffycop.dailyrewards.DailyRewards;
 softdepend: [Vault]
