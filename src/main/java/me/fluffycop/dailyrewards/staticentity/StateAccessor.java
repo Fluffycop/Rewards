@@ -1,7 +1,10 @@
-package me.fluffycop.dailyrewards;
+package me.fluffycop.dailyrewards.staticentity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import me.fluffycop.dailyrewards.DailyRewards;
+import me.fluffycop.dailyrewards.entity.CustomPlayer;
+import me.fluffycop.dailyrewards.entity.Reward;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,6 +28,7 @@ public class StateAccessor {
     public void saveAll(){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         for(CustomPlayer player : CustomPlayer.get()){
+            clean(player);
             File file = new File(dataFolder.getAbsolutePath() + File.separator + player.getPlayerID() + FILE_EXT);
             if(file.exists()){
                 write(player, file, gson);
@@ -63,5 +67,13 @@ public class StateAccessor {
             e.printStackTrace();
         }
 
+    }
+
+    private void clean(CustomPlayer player){
+        for(String rewardStr : player.getRewardMinutesMap().keySet()){
+            if(Reward.getByName(rewardStr) == null){
+                player.getRewardMinutesMap().remove(rewardStr);
+            }
+        }
     }
 }

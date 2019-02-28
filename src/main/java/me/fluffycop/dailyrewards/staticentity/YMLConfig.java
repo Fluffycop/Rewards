@@ -1,5 +1,8 @@
-package me.fluffycop.dailyrewards;
+package me.fluffycop.dailyrewards.staticentity;
 
+import me.fluffycop.dailyrewards.DailyRewards;
+import me.fluffycop.dailyrewards.entity.CustomItem;
+import me.fluffycop.dailyrewards.entity.Reward;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -11,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.*;
 import java.util.*;
 
-class YMLConfig {
+public class YMLConfig {
     private DailyRewards plugin;
 
     private File configFile;
@@ -87,7 +90,7 @@ class YMLConfig {
                 itemWrapper.setName(anItemStr);
                 itemWrapper.setItem(item);
 
-                DailyRewards.getCustomItemSet().add(itemWrapper);
+                CustomItem.get().add(itemWrapper);
             }catch(Exception exception){
                 exception.printStackTrace();
                 continue;

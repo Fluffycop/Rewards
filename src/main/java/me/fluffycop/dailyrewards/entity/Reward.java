@@ -1,5 +1,6 @@
-package me.fluffycop.dailyrewards;
+package me.fluffycop.dailyrewards.entity;
 
+import me.fluffycop.dailyrewards.DailyRewards;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

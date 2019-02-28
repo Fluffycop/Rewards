@@ -1,4 +1,4 @@
-package me.fluffycop.dailyrewards;
+package me.fluffycop.dailyrewards.entity;
 
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;

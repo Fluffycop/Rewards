@@ -1,6 +1,6 @@
-package me.fluffycop.dailyrewards;
+package me.fluffycop.dailyrewards.entity;
 
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 
 import java.util.*;
 
@@ -41,6 +41,10 @@ public class CustomPlayer {
 
     public Map<String, Integer> getRewardMinutesMap() {
         return rewardMinutesMap;
+    }
+
+    public synchronized void replace(String str, int i){
+        rewardMinutesMap.replace(str, i);
     }
 
     public static synchronized void add(CustomPlayer player){

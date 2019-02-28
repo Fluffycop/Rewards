@@ -1,5 +1,7 @@
-package me.fluffycop.dailyrewards;
+package me.fluffycop.dailyrewards.staticentity;
 
+import me.fluffycop.dailyrewards.DailyRewards;
+import me.fluffycop.dailyrewards.entity.CustomPlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Date;
@@ -33,7 +35,7 @@ public class RewardDecrementerTask extends BukkitRunnable {
                     Map<String, Integer> rewardMinuteMap = cPlayer.getRewardMinutesMap();
                     int oldMinute = rewardMinuteMap.get(reward);
                     if(oldMinute != 0){
-                        rewardMinuteMap.put(reward, oldMinute - 1);
+                        cPlayer.replace(reward, oldMinute - 1);
                     }
                 }
             }
@@ -42,9 +44,5 @@ public class RewardDecrementerTask extends BukkitRunnable {
 
     private boolean checkForAccuracy(){
         return new Date().getTime() >= nextRun.getTime();
-    }
-
-    public synchronized void stop(){
-        enabled = false;
     }
 }

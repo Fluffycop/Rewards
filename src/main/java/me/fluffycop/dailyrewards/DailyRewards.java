@@ -1,5 +1,10 @@
 package me.fluffycop.dailyrewards;
 
+import me.fluffycop.dailyrewards.command.RewardCommandManager;
+import me.fluffycop.dailyrewards.listener.FirstJoin;
+import me.fluffycop.dailyrewards.staticentity.RewardDecrementerTask;
+import me.fluffycop.dailyrewards.staticentity.StateAccessor;
+import me.fluffycop.dailyrewards.staticentity.YMLConfig;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -7,36 +12,44 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DailyRewards extends JavaPlugin {
-    //TODO: Add command manager and register the command
     //TODO: Test in an actual server environment
 
     //const
-    public final File DATA_FOLDER = new File(this.getDataFolder().getAbsolutePath() + File.separator + "data");
+    private final File DATA_FOLDER = new File(this.getDataFolder().getAbsolutePath() + File.separator + "data");
+    private final String VAULT_NAME = "Vault";
 
-    private final YMLConfig config = new YMLConfig(this);
-    private final StateAccessor dataAccessor = new StateAccessor(this, DATA_FOLDER);
+    private YMLConfig config;
+    private StateAccessor dataAccessor;
+    private BukkitTask rewardDecrementerTask;
 
-    private final BukkitTask rewardDecrementerTask = new RewardDecrementerTask(this).runTaskTimerAsynchronously(this, RewardDecrementerTask.SECOND_TICKS * 60, RewardDecrementerTask.SECOND_TICKS);
-
-    private final boolean vaultEnabled = Bukkit.getServer().getPluginManager().getPlugin("Vault") != null;
-    private final boolean ecoEnabled = Bukkit.getServer().getServicesManager().getRegistration(Economy.class).getProvider() != null;
+    private boolean vaultEnabled;
+    private boolean ecoEnabled;
 
     public static Economy economy;
 
     @Override
     public void onEnable(){
+        initStaticEntities();
+        setupVault();
         enableCheck();
         config.loadYamls();
+        registerListeners();
     }
 
     @Override
     public void onDisable(){
+        rewardDecrementerTask.cancel();
         config.saveYamls();
+    }
+
+    private void registerListeners(){
+        getServer().getPluginManager().registerEvents(new FirstJoin(), this);
+    }
+
+    private void registerCommands(){
+        getCommand(RewardCommandManager.REWARD_CMD_ALIAS).setExecutor(new RewardCommandManager());
     }
 
     private boolean enableCheck(){
@@ -45,6 +58,25 @@ public class DailyRewards extends JavaPlugin {
             return false;
         }
         return true;
+    }
+
+    private void initStaticEntities(){
+        config = new YMLConfig(this);
+        dataAccessor = new StateAccessor(this, DATA_FOLDER);
+        rewardDecrementerTask = new RewardDecrementerTask(this).runTaskTimerAsynchronously(this, RewardDecrementerTask.SECOND_TICKS * 60, RewardDecrementerTask.SECOND_TICKS);
+    }
+
+    private void setupVault(){
+        vaultEnabled = Bukkit.getServer().getPluginManager().getPlugin(VAULT_NAME) != null;
+        if(!vaultEnabled){
+            return;
+        }
+
+        RegisteredServiceProvider<Economy> ecoProvider = getServer().getServicesManager().getRegistration(Economy.class);
+        if(ecoProvider != null){
+            economy = ecoProvider.getProvider();
+        }
+        ecoEnabled = economy != null;
     }
 
     public YMLConfig getYMLConfig() {
