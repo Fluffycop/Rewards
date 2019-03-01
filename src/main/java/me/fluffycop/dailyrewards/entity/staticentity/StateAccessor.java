@@ -1,4 +1,4 @@
-package me.fluffycop.dailyrewards.staticentity;
+package me.fluffycop.dailyrewards.entity.staticentity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

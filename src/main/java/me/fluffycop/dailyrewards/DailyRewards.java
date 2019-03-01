@@ -2,9 +2,9 @@ package me.fluffycop.dailyrewards;
 
 import me.fluffycop.dailyrewards.command.RewardCommandManager;
 import me.fluffycop.dailyrewards.listener.FirstJoin;
-import me.fluffycop.dailyrewards.staticentity.RewardDecrementerTask;
-import me.fluffycop.dailyrewards.staticentity.StateAccessor;
-import me.fluffycop.dailyrewards.staticentity.YMLConfig;
+import me.fluffycop.dailyrewards.entity.staticentity.RewardDecrementerTask;
+import me.fluffycop.dailyrewards.entity.staticentity.StateAccessor;
+import me.fluffycop.dailyrewards.entity.staticentity.YMLConfig;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;

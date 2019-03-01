@@ -1,4 +1,4 @@
-package me.fluffycop.dailyrewards.staticentity;
+package me.fluffycop.dailyrewards.entity.staticentity;
 
 import me.fluffycop.dailyrewards.DailyRewards;
 import me.fluffycop.dailyrewards.entity.CustomPlayer;
