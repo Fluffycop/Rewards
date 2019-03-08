@@ -16,8 +16,7 @@ public class CustomPlayer {
     public CustomPlayer(String id){
         this.playerID = id;
         for(Reward reward : Reward.get()){
-            int minutes = reward.getRefreshMinutes();
-            rewardMinutesMap.put(reward.getName(), minutes);
+            rewardMinutesMap.put(reward.getName(), 0);
         }
         add(this);
     }

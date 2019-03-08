@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,6 +43,8 @@ public class YMLConfig {
 
     public YMLConfig(DailyRewards plugin){
         this.plugin = plugin;
+        this.configFile = new File(plugin.getDataFolder().getPath() + File.separator + "config.yml");
+        this.config = new YamlConfiguration();
         try{
             firstRun();
         }catch(Exception exception){
@@ -58,7 +61,7 @@ public class YMLConfig {
         //parse custom items from config
         ConfigurationSection itemSection = config.getConfigurationSection(ITEM_SECTION);
         for(String anItemStr : itemSection.getKeys(false)){
-            ConfigurationSection anItem = config.getConfigurationSection(anItemStr);
+            ConfigurationSection anItem = itemSection.getConfigurationSection(anItemStr);
 
             //skip this iteration if the material doesnt have a definition in material enum
             try {
@@ -77,9 +80,11 @@ public class YMLConfig {
                 for(String str : anItem.getStringList(ENCHANT_FIELD)){
                     try {
                         String[] enchantAndLevel = str.split(",");
-                        Enchantment enchant = Enchantment.getByKey(NamespacedKey.minecraft(enchantAndLevel[0]));
+                        Enchantment enchant = Enchantment.getByName(enchantAndLevel[0]);
                         int level = Integer.parseInt(enchantAndLevel[1]);
-                        anItemMeta.addEnchant(enchant, level, true);
+                        Map<Enchantment, Integer> arg = new HashMap<>();
+                        arg.put(enchant, level);
+                        item.addUnsafeEnchantments(arg);
                     } catch(Exception exception){
                         exception.printStackTrace();
                         continue;
@@ -101,7 +106,7 @@ public class YMLConfig {
         ConfigurationSection rewardSection = config.getConfigurationSection(REWARD_SECTION);
         for(String rewardStr : rewardSection.getKeys(false)){
             //init a reward part of the config & config object
-            ConfigurationSection aRewardSection = config.getConfigurationSection(rewardStr);
+            ConfigurationSection aRewardSection = rewardSection.getConfigurationSection(rewardStr);
             Reward reward = new Reward();
             reward.setName(rewardStr);
 
@@ -122,7 +127,10 @@ public class YMLConfig {
                 String[] materialAmount = materialStr.split(",");
                 CustomItem cItem = CustomItem.getByName(materialAmount[0]);
 
-                if(materialAmount[0].equals(MONEY_MATERIAL) && plugin.isEcoEnabled()) {
+                if(materialAmount[0].equals(MONEY_MATERIAL)) {
+                    if(!plugin.isEcoEnabled()){
+                        continue;
+                    }
                     try{
                         double moneyAmount = Double.parseDouble(materialAmount[1]);
                         reward.setMoney(moneyAmount);
@@ -182,13 +190,7 @@ public class YMLConfig {
             e.printStackTrace();
         }
     }
-    public void saveYamls() {
-        try {
-            config.save(configFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
     public void loadYamls() {
         try {
             config.load(configFile);

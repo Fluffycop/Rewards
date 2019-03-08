@@ -14,38 +14,36 @@ import org.bukkit.scheduler.BukkitTask;
 import java.io.File;
 
 public class DailyRewards extends JavaPlugin {
-    //TODO: Test in an actual server environment
+    //TODO: Test persistent data system and change first join listener
 
     //const
-    private final File DATA_FOLDER = new File(this.getDataFolder().getAbsolutePath() + File.separator + "data");
-    private final String VAULT_NAME = "Vault";
+    public final File DATA_FOLDER = new File(this.getDataFolder().getAbsolutePath() + File.separator + "data");
 
     private YMLConfig config;
     private StateAccessor dataAccessor;
     private BukkitTask rewardDecrementerTask;
 
-    private boolean vaultEnabled;
     private boolean ecoEnabled;
 
     public static Economy economy;
 
     @Override
     public void onEnable(){
-        initStaticEntities();
         setupVault();
+        initStaticEntities();
         enableCheck();
-        config.loadYamls();
         registerListeners();
+        registerCommands();
     }
 
     @Override
     public void onDisable(){
         rewardDecrementerTask.cancel();
-        config.saveYamls();
+        dataAccessor.saveAll();
     }
 
     private void registerListeners(){
-        getServer().getPluginManager().registerEvents(new FirstJoin(), this);
+        getServer().getPluginManager().registerEvents(new FirstJoin(this), this);
     }
 
     private void registerCommands(){
@@ -63,19 +61,21 @@ public class DailyRewards extends JavaPlugin {
     private void initStaticEntities(){
         config = new YMLConfig(this);
         dataAccessor = new StateAccessor(this, DATA_FOLDER);
-        rewardDecrementerTask = new RewardDecrementerTask(this).runTaskTimerAsynchronously(this, RewardDecrementerTask.SECOND_TICKS * 60, RewardDecrementerTask.SECOND_TICKS);
+        dataAccessor.loadAll();
+        rewardDecrementerTask = new RewardDecrementerTask().runTaskTimerAsynchronously(this, RewardDecrementerTask.SECOND_TICKS * 60, RewardDecrementerTask.SECOND_TICKS);
     }
 
     private void setupVault(){
-        vaultEnabled = Bukkit.getServer().getPluginManager().getPlugin(VAULT_NAME) != null;
-        if(!vaultEnabled){
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            ecoEnabled = false;
             return;
         }
-
-        RegisteredServiceProvider<Economy> ecoProvider = getServer().getServicesManager().getRegistration(Economy.class);
-        if(ecoProvider != null){
-            economy = ecoProvider.getProvider();
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            ecoEnabled = false;
+            return;
         }
+        economy = rsp.getProvider();
         ecoEnabled = economy != null;
     }
 
@@ -85,10 +85,6 @@ public class DailyRewards extends JavaPlugin {
 
     public StateAccessor getDataAccessor() {
         return dataAccessor;
-    }
-
-    public boolean isVaultEnabled() {
-        return vaultEnabled;
     }
 
     public boolean isEcoEnabled() {

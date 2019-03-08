@@ -14,6 +14,11 @@ public class RewardCommandManager implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args){
         if(sender instanceof Player){
+            if(!sender.hasPermission(DRCommandPermissions.REWARD_PERMISSION)){
+                sender.sendMessage(DRCommandMessages.NO_PERMISSION);
+                return true;
+            }
+
             if(args.length == 0){
                 sender.sendMessage(DRCommandMessages.HELP_MSG);
                 return true;
@@ -43,9 +48,14 @@ public class RewardCommandManager implements CommandExecutor {
                         return true;
                     }
 
-                    //
+                    CustomPlayer cPlayer = CustomPlayer.getByID(player.getUniqueId().toString());
+                    if(cPlayer.getRewardMinutesMap().get(reward.getName()) != 0){
+                        sender.sendMessage(DRCommandMessages.COOLDOWN_ERROR(reward.getName()));
+                        return true;
+                    }
 
                     reward.rewardTo(player);
+                    cPlayer.replace(reward.getName(), reward.getRefreshMinutes());
                     sender.sendMessage(DRCommandMessages.SUCCESS_REWARD_CLAIM(rewardStr));
                     return true;
                 }

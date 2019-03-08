@@ -11,7 +11,7 @@ import java.util.*;
 public class Reward {
     private Set<ItemStack> rewardItemsVanilla = new HashSet<>();
     private Map<CustomItem, Integer> rewardItemsCustom = new HashMap<>();
-    private double money = 0.0;
+    private double money;
     private String name;
     private String permission;
     private int refreshMinutes;
@@ -19,6 +19,7 @@ public class Reward {
     private final static Set<Reward> rewardSet = Collections.synchronizedSet(new HashSet<Reward>());
 
     public Reward(){
+        money = 0.0;
         add(this);
     }
 

@@ -30,12 +30,14 @@ public class StateAccessor {
         for(CustomPlayer player : CustomPlayer.get()){
             clean(player);
             File file = new File(dataFolder.getAbsolutePath() + File.separator + player.getPlayerID() + FILE_EXT);
-            if(file.exists()){
-                write(player, file, gson);
-            }else{
-                file.mkdir();
-                write(player, file, gson);
+            if(!file.exists()){
+                try{
+                    file.createNewFile();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
+            write(player, file, gson);
         }
     }
 
