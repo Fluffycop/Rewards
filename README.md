@@ -1,1 +1,1 @@
-# DailyRewards
+# Rewards
